@@ -1,0 +1,87 @@
+create or replace function pro_drp_change_branch(p_mark      in varchar2,
+                                                      p_branch_no in varchar2)
+  return varchar2 is
+  v_branch_no varchar2(10);
+  P_DBUSER    varchar2(50);
+  /*goldengate,李德强,20150521，01*/
+  /*goldengate,李德强,20150603，01*/
+  /*goldengate,孙和平,20160518，01*/
+  /*goldengate,陈志宇,20190618，01*/
+begin
+  --add by ldq at 20150512
+  SELECT USER INTO P_DBUSER FROM DUAL;
+
+  --转换组织
+  IF P_MARK = '1' THEN
+    --接口用户
+    IF P_DBUSER NOT IN
+       ('PESD', 'PESDDEVELOP', 'PESDMAINTAIN', 'SYS', 'SYSTEM','PESD_CHECK','LMSYS','LMSDEVELOP') THEN
+      v_BRANCH_NO := PESD.DRP.Get_Var_Field_Value('drp001t1',
+                                                  'name',
+                                                  'kind_id=''0611'' and delete_date is null and memo=' || '''' ||
+                                                  p_branch_no || '''');
+
+      --本地用户
+    ELSE
+      v_branch_no := PESD.DRP.Get_Var_Field_Value('drp001t1',
+                                                  'memo',
+                                                  'kind_id=''0611'' and delete_date is null and name=' || '''' ||
+                                                  p_branch_no || '''');
+    END IF;
+
+  ElSIF P_MARK = '2' THEN
+    --逆向转换
+    --接口用户
+    IF P_DBUSER NOT IN
+       ('PESD', 'PESDDEVELOP', 'PESDMAINTAIN', 'SYS', 'SYSTEM','PESD_CHECK','LMSYS','LMSDEVELOP') THEN
+      v_branch_no := PESD.DRP.Get_Var_Field_Value('drp001t1',
+                                                  'memo',
+                                                  'kind_id=''0611'' and delete_date is null and name=' || '''' ||
+                                                  p_branch_no || '''');
+
+      --本地用户
+    ELSE
+
+      v_BRANCH_NO := PESD.DRP.Get_Var_Field_Value('drp001t1',
+                                                  'name',
+                                                  'kind_id=''0611'' and delete_date is null and memo=' || '''' ||
+                                                  p_branch_no || '''');
+    END IF;
+  ELSIF P_MARK = '3' THEN
+    --接口用户
+    IF P_DBUSER NOT IN
+       ('PESD', 'PESDDEVELOP', 'PESDMAINTAIN', 'SYS', 'SYSTEM','PESD_CHECK','LMSYS','LMSDEVELOP') THEN
+      v_BRANCH_NO := PESD.DRP.Get_Var_Field_Value('drp001t1',
+                                                  'max(name)',
+                                                  'kind_id=''0613'' and delete_date is null and memo=' || '''' ||
+                                                  p_branch_no || '''');
+
+      --本地用户
+    ELSE
+      v_branch_no := PESD.DRP.Get_Var_Field_Value('drp001t1',
+                                                  'memo',
+                                                  'kind_id=''0613'' and delete_date is null and name=' || '''' ||
+                                                  p_branch_no || '''');
+    END IF;
+  ELSIF P_MARK = '4' THEN
+    --逆向转换
+    --接口用户
+    IF P_DBUSER NOT IN
+       ('PESD', 'PESDDEVELOP', 'PESDMAINTAIN', 'SYS', 'SYSTEM','PESD_CHECK','LMSYS','LMSDEVELOP') THEN
+      v_branch_no := PESD.DRP.Get_Var_Field_Value('drp001t1',
+                                                  'memo',
+                                                  'kind_id=''0613'' and delete_date is null and name=' || '''' ||
+                                                  p_branch_no || '''');
+
+      --本地用户
+    ELSE
+
+      v_BRANCH_NO := PESD.DRP.Get_Var_Field_Value('drp001t1',
+                                                  'max(name)',
+                                                  'kind_id=''0613'' and delete_date is null and memo=' || '''' ||
+                                                  p_branch_no || '''');
+    END IF;
+  END IF;
+  return(nvl(v_branch_no, p_branch_no));
+end pro_drp_change_branch;
+/
