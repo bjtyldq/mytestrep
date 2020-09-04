@@ -5,8 +5,6 @@ create or replace function pro_drp_change_branch(p_mark      in varchar2,
   P_DBUSER    varchar2(50);
   /*goldengate,李德强,20150521，01*/
   /*goldengate,李德强,20150603，01*/
-  /*goldengate,孙和平,20160518，01*/
-  /*goldengate,陈志宇,20190618，01*/
 begin
   --add by ldq at 20150512
   SELECT USER INTO P_DBUSER FROM DUAL;
