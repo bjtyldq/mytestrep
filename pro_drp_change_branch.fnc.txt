@@ -9,6 +9,7 @@ begin
   --add by ldq at 20150512
   SELECT USER INTO P_DBUSER FROM DUAL;
   222222222222
+  333333333333
   --转换组织
   IF P_MARK = '1' THEN
     --接口用户
